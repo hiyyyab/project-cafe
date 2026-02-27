@@ -1,7 +1,11 @@
+import os
+from dotenv import load_dotenv
 from flask import Flask, render_template
 from pymongo import MongoClient
 
-MONGODB_URI = "mongodb+srv://hiyabgebreegziabher_db_user:uQwhvJqSkbgCAYw6@cafe-db.ugzmv2z.mongodb.net/?appName=cafe-db"
+load_dotenv()
+MONGODB_URI = os.getenv("MONGODB_URI")
+print("MONGODB_URI loaded?", MONGODB_URI is not None)
 client = MongoClient(MONGODB_URI)
 
 db = client["stars"]
@@ -49,4 +53,4 @@ def search_cafes(rating):
     return result
 
 
-app.run(host="0.0.0.0", port=8000)
+app.run(host="0.0.0.0", port=5001)
