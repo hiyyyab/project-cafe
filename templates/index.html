@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Best Rated Cafes</title>
+    <style>
+  /* Page */
+  body {
+    margin: 0;
+    padding: 48px 18px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #f6f7fb;
+    color: #111827;
+  }
+
+  /* Title */
+  h1 {
+    margin: 0 0 18px 0;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  h1 em {
+    font-style: normal;
+  }
+
+  /* Input + button */
+  #rating_input {
+    width: 280px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid #d6d9e0;
+    font-size: 16px;
+    outline: none;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    vertical-align: middle;
+  }
+
+  #rating_input:focus {
+    border-color: #7c5cff;
+    box-shadow: 0 0 0 4px rgba(124,92,255,0.18);
+  }
+
+  button {
+    padding: 12px 16px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 12px;
+    background: #7c5cff;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(124,92,255,0.22);
+    vertical-align: middle;
+  }
+
+  button:hover { opacity: 0.92; }
+  button:active { transform: translateY(1px); }
+
+  /* Results list as cards */
+  #result_list {
+    list-style: none;
+    padding: 0;
+    margin: 22px 0 0 0;
+    display: grid;
+    gap: 12px;
+    max-width: 720px;
+  }
+
+  #result_list li {
+    background: #ffffff;
+    border: 1px solid #eceef3;
+    border-radius: 14px;
+    padding: 14px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    font-size: 16px;
+    line-height: 1.35;
+  }
+
+  /* Make image small + consistent */
+  #result_list li img {
+    width: 72px;
+    height: 54px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid #eef0f4;
+    flex: 0 0 auto;
+    display: block;
+  }
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+    function search() {
+
+            console.log("Button is clicked");
+            var rating = $("#rating_input").val();
+            console.log("Rating: " + rating);
+
+
+        //2. call the backend server URL
+        //ajax
+        $.ajax({
+          url: `/search/${encodeURIComponent(rating)}`,
+          method: "GET",
+          dataType: "json",
+          success: function (data) {
+          // 3. render the results under the list
+                $("#result_list").empty();
+                for(var i = 0; i < data.length; i++) {
+                    console.log("test: " + data[i].name);
+                    console.log("test: " + data[i].rating);
+                    $("#result_list").append("<li>" + data[i].name + ": " + data[i].rating  + "<img src='" + data[i].image_url + "'></img>" + "</li>");
+                }
+              },
+          error: function (xhr, status, err) {
+            console.error("Error:", status, err, xhr.responseText);
+          }
+        });
+    }
+    </script>
+
+</head>
+<body>
+    <h1><em>Input the lowest cafe rating you want to look at! </em></h1>
+    <input id="rating_input" type="text"> </input>
+    <button onclick="search()">Search</button>
+
+    <ul id="result_list">
+
+    </ul>
+</body>
+</html>
